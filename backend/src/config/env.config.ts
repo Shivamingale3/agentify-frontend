@@ -5,6 +5,6 @@ import envSchema from '../validationSchemas/env.schema.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-config({ path: path.resolve(__dirname, '../../../.env') });
+config({ path: path.resolve(__dirname, '../../.env') });
 
 export const env = envSchema.parse(process.env);

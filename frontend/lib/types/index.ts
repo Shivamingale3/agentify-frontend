@@ -33,3 +33,12 @@ export interface ApiError {
   message: string;
   fieldErrors?: Partial<Record<keyof LoginRequest, string[]>>;
 }
+
+export type ServerEnv = {
+  BACKEND_URL: string;
+  NODE_ENV: string;
+};
+
+export type ClientEnv = {
+  NEXT_PUBLIC_APP_NAME: string;
+};
