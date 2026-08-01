@@ -21,6 +21,11 @@
   // ESLint settings
   "eslint.validate": ["typescript"],
 
+  // Hide generated Prisma schema to avoid false duplicate-definition errors
+  "files.exclude": {
+    "**/node_modules/.prisma": true
+  },
+
   // Search exclusions
   "search.exclude": {
     "**/node_modules": true,

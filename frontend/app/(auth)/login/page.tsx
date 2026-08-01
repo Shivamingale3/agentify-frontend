@@ -15,9 +15,6 @@ export default function LogIn() {
     <div className="space-y-6">
       <div className="flex flex-col items-center space-y-1 text-center">
         <Logo mode="landscape" size="xl" />
-        <p className="text-sm text-muted-foreground">
-          Sign in to manage your bots.
-        </p>
       </div>
 
       <Suspense>

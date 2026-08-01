@@ -10,10 +10,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 config({ path: path.resolve(__dirname, '.env') });
 
 export default defineConfig({
-  schema: 'prisma/schema.prisma',
+  schema: 'prisma/schema',
   migrations: {
     path: 'prisma/migrations',
-    seed: 'tsx src/seed.ts',
   },
   datasource: {
     url: process.env['DATABASE_URL'],

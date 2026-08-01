@@ -8,48 +8,40 @@ export function cn(...inputs: ClassValue[]) {
 export function sizeResolver(
   size: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl",
 ): { height: number; width: number } {
-  let height = 100;
-  let width = 100;
+  let dimensions = 48;
 
   switch (size) {
-    case "5xl":
-      height = 500;
-      width = 500;
-      break;
-    case "4xl":
-      height = 400;
-      width = 400;
-      break;
-    case "3xl":
-      height = 300;
-      width = 300;
-      break;
-    case "2xl":
-      height = 200;
-      width = 200;
-      break;
-    case "xl":
-      height = 100;
-      width = 100;
-      break;
-    case "lg":
-      height = 50;
-      width = 50;
+    case "xs":
+      dimensions = 20;
       break;
     case "sm":
-      height = 25;
-      width = 25;
+      dimensions = 28;
       break;
-    case "xs":
-      height = 20;
-      width = 20;
+    case "md":
+      dimensions = 40;
       break;
-
+    case "lg":
+      dimensions = 56;
+      break;
+    case "xl":
+      dimensions = 80;
+      break;
+    case "2xl":
+      dimensions = 120;
+      break;
+    case "3xl":
+      dimensions = 160;
+      break;
+    case "4xl":
+      dimensions = 220;
+      break;
+    case "5xl":
+      dimensions = 300;
+      break;
     default:
-      height = 100;
-      width = 100;
+      dimensions = 40;
       break;
   }
 
-  return { height, width };
+  return { height: dimensions, width: dimensions };
 }
