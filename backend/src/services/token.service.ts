@@ -1,13 +1,12 @@
 import type { User } from '@prisma/client';
 import { env } from '../config/env.config.js';
 import jwt from 'jsonwebtoken';
-
-interface TokenPayload {
-  userId: string;
-  email: string;
-  iat: number;
-  exp: number;
-}
+import {
+  accessTokenSchema,
+  baseTokenSchema,
+  refreshTokenSchema,
+} from '../validationSchemas/auth.schema.js';
+import type { AccessTokenPayload, RefreshTokenPayload } from '../types/auth.types.js';
 
 export function createAccessToken(user: Pick<User, 'userId' | 'email'>): string {
   return jwt.sign(user, env.TOKEN_SECRET, {
@@ -16,32 +15,39 @@ export function createAccessToken(user: Pick<User, 'userId' | 'email'>): string 
   });
 }
 
-export function createRefreshToken(user: Pick<User, 'userId' | 'email'>): string {
-  return jwt.sign(user, env.TOKEN_SECRET, {
+export function createRefreshToken(sessionId: string): string {
+  return jwt.sign({ sessionId }, env.TOKEN_SECRET, {
     expiresIn: env.REFRESH_TOKEN_EXPIRY,
     algorithm: 'RS512',
   });
 }
 
-export function verifyAccessToken(token: string): TokenPayload {
-  return jwt.verify(token, env.TOKEN_SECRET) as TokenPayload;
+export function verifyAccessToken(token: string): AccessTokenPayload {
+  const payload = jwt.verify(token, env.TOKEN_SECRET);
+  return accessTokenSchema.parse(payload);
 }
 
-export function verifyRefreshToken(token: string): TokenPayload {
-  return jwt.verify(token, env.TOKEN_SECRET) as TokenPayload;
+export function verifyRefreshToken(token: string): RefreshTokenPayload {
+  const payload = jwt.verify(token, env.TOKEN_SECRET);
+  return refreshTokenSchema.parse(payload);
 }
 
-export function decodeToken(token: string): TokenPayload | null {
+export function decodeAccessToken(token: string): AccessTokenPayload | null {
   const decoded = jwt.decode(token);
-  if (decoded === null || typeof decoded === 'string') {
-    return null;
-  }
-  return decoded as TokenPayload;
+  const result = accessTokenSchema.safeParse(decoded);
+  return result.success ? result.data : null;
+}
+
+export function decodeRefreshToken(token: string): RefreshTokenPayload | null {
+  const decoded = jwt.decode(token);
+  const result = refreshTokenSchema.safeParse(decoded);
+  return result.success ? result.data : null;
 }
 
 export function getExpirationDate(token: string): number | undefined {
   const decoded = jwt.decode(token, { complete: true });
-  return (decoded?.payload as TokenPayload | undefined)?.exp;
+  const result = baseTokenSchema.safeParse(decoded?.payload);
+  return result.success ? result.data.exp : undefined;
 }
 
 export function isTokenExpired(token: string): boolean {

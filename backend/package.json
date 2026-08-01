@@ -32,7 +32,11 @@
     "@google/genai": "^2.10.0",
     "@libsql/client": "^0.17.4",
     "@prisma/adapter-libsql": "^7.8.0",
-    "@prisma/client": "^7.8.0",
+    "@prisma/adapter-pg": "^7.9.1",
+    "@prisma/client": "^7.9.1",
+    "@types/pg": "^8.20.3",
+    "@types/redis": "^4.0.10",
+    "@types/ua-parser-js": "^0.7.39",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
@@ -42,6 +46,9 @@
     "helmet": "^8.2.0",
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.11.0",
+    "pg": "^8.22.0",
+    "redis": "^6.2.0",
+    "ua-parser-js": "^2.0.10",
     "ulid": "^3.0.2",
     "winston": "^3.19.0",
     "zod": "^4.4.3"
@@ -61,7 +68,7 @@
     "eslint-config-prettier": "^10.1.8",
     "lint-staged": "^17.0.8",
     "prettier": "^3.9.4",
-    "prisma": "^7.8.0",
+    "prisma": "^7.9.1",
     "supertest": "^7.2.2",
     "tsx": "^4.22.4",
     "typescript": "^6.0.3",
@@ -70,10 +77,10 @@
   },
   "allowScripts": {
     "@google/genai@2.10.0": true,
-    "@prisma/engines@7.8.0": true,
     "bcrypt@6.0.0": true,
     "esbuild@0.28.1": true,
-    "prisma@7.8.0": true,
-    "protobufjs@7.6.5": true
+    "protobufjs@7.6.5": true,
+    "@prisma/engines@7.9.1": true,
+    "prisma@7.9.1": true
   }
 }

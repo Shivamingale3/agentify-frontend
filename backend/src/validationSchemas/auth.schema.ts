@@ -9,3 +9,17 @@ export const loginSchema = z.object({
       'Password must be between 8 to 16 characters long and must have at least a capital, a small, a character and a number!',
     ),
 });
+
+export const baseTokenSchema = z.object({
+  iat: z.number(),
+  exp: z.number(),
+});
+
+export const accessTokenSchema = baseTokenSchema.extend({
+  userId: z.string(),
+  email: z.email(),
+});
+
+export const refreshTokenSchema = baseTokenSchema.extend({
+  sessionId: z.string(),
+});

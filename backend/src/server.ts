@@ -1,5 +1,6 @@
 import { app } from './app.js';
 import { db } from './config/db.config.js';
+import { connectRedis, disconnectRedis } from './config/cache.config.js';
 import { env } from './config/env.config.js';
 import { logger } from './utils/logger.js';
 
@@ -9,12 +10,42 @@ async function startServer(): Promise<void> {
     await db.$connect();
     logger.info('Database connection established successfully.');
 
+    // Redis Cache Connection & Health Check
+    await connectRedis();
+
     // Start Express Server
-    app.listen(env.APP_PORT, () => {
+    const server = app.listen(env.APP_PORT, () => {
       logger.info(`Server is running on port ${env.APP_PORT}`);
     });
+
+    // Graceful Shutdown Handlers
+    const handleShutdown = async (signal: string): Promise<void> => {
+      logger.info(`Received ${signal}. Starting graceful shutdown...`);
+
+      await new Promise<void>((resolve) => {
+        server.close((err) => {
+          if (err) {
+            logger.error('Error closing server:', err);
+          }
+          resolve();
+        });
+      });
+
+      try {
+        await db.$disconnect();
+        await disconnectRedis();
+        logger.info('Graceful shutdown completed successfully.');
+        process.exit(0);
+      } catch (err) {
+        logger.error('Error during graceful shutdown:', err);
+        process.exit(1);
+      }
+    };
+
+    process.on('SIGTERM', () => void handleShutdown('SIGTERM'));
+    process.on('SIGINT', () => void handleShutdown('SIGINT'));
   } catch (error) {
-    logger.error('Failed to connect to the database or start the server:', error);
+    logger.error('Failed to connect to services or start the server:', error);
     process.exit(1);
   }
 }

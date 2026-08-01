@@ -1,1 +1,15 @@
+model UserSession {
+  sessionId        String    @id
+  userId           String
+  refreshTokenHash String
+  device           String?
+  ip               String?
+  userAgent        String?
+  expiresAt        Int?
+  lastUsedAt       DateTime?
+  revokedAt        DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
+  @@map("user_sessions")
+}
