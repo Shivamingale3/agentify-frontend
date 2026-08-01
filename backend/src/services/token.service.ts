@@ -2,6 +2,13 @@ import type { User } from '@prisma/client';
 import { env } from '../config/env.config.js';
 import jwt from 'jsonwebtoken';
 
+interface TokenPayload {
+  userId: string;
+  email: string;
+  iat: number;
+  exp: number;
+}
+
 export function createAccessToken(user: Pick<User, 'userId' | 'email'>): string {
   return jwt.sign(user, env.TOKEN_SECRET, {
     expiresIn: env.ACCESS_TOKEN_EXPIRY,
@@ -16,38 +23,29 @@ export function createRefreshToken(user: Pick<User, 'userId' | 'email'>): string
   });
 }
 
-export function verifyAccessToken(token: string): {
-  userId: string;
-  email: string;
-  exp: number;
-  iat: number;
-} {
-  return jwt.verify(token, env.TOKEN_SECRET) as {
-    userId: string;
-    email: string;
-    exp: number;
-    iat: number;
-  };
+export function verifyAccessToken(token: string): TokenPayload {
+  return jwt.verify(token, env.TOKEN_SECRET) as TokenPayload;
 }
 
-export function verifyRefreshToken(token: string): {
-  userId: string;
-  email: string;
-  exp: number;
-  iat: number;
-} {
-  return jwt.verify(token, env.TOKEN_SECRET) as {
-    userId: string;
-    email: string;
-    exp: number;
-    iat: number;
-  };
+export function verifyRefreshToken(token: string): TokenPayload {
+  return jwt.verify(token, env.TOKEN_SECRET) as TokenPayload;
 }
 
-export function decodeToken(token: string) {
-  return jwt.decode(token);
+export function decodeToken(token: string): TokenPayload | null {
+  const decoded = jwt.decode(token);
+  if (decoded === null || typeof decoded === 'string') {
+    return null;
+  }
+  return decoded as TokenPayload;
 }
 
-export function getExpirationDate(token: string) {
-  return jwt.decode(token, { complete: true })?.payload.exp;
+export function getExpirationDate(token: string): number | undefined {
+  const decoded = jwt.decode(token, { complete: true });
+  return (decoded?.payload as TokenPayload | undefined)?.exp;
+}
+
+export function isTokenExpired(token: string): boolean {
+  const exp = getExpirationDate(token);
+  if (exp === undefined) return true;
+  return Date.now() >= exp * 1000;
 }

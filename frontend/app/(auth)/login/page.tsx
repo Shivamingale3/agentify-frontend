@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { LoginForm } from "@/components/features/auth/login-form";
 import { Routes } from "@/lib/constants";
+import Logo from "@/components/ui/logo";
 
 export const metadata = {
   title: "Sign in",
@@ -12,10 +13,8 @@ export const metadata = {
 export default function LogIn() {
   return (
     <div className="space-y-6">
-      <div className="space-y-1 text-center">
-        <h1 className="font-heading text-2xl font-semibold uppercase tracking-wider">
-          Get Your Bot
-        </h1>
+      <div className="flex flex-col items-center space-y-1 text-center">
+        <Logo mode="landscape" size="xl" />
         <p className="text-sm text-muted-foreground">
           Sign in to manage your bots.
         </p>

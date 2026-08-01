@@ -1,4 +1,6 @@
 import type { ApiErrorCode } from "@/lib/enums";
+import type z from "zod";
+import type { envSchema } from "../validations/env";
 
 export interface LoginRequest {
   email: string;
@@ -34,11 +36,4 @@ export interface ApiError {
   fieldErrors?: Partial<Record<keyof LoginRequest, string[]>>;
 }
 
-export type ServerEnv = {
-  BACKEND_URL: string;
-  NODE_ENV: string;
-};
-
-export type ClientEnv = {
-  NEXT_PUBLIC_APP_NAME: string;
-};
+export type Env = z.infer<typeof envSchema>;

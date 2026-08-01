@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { serverEnv } from "@/lib/config/env";
+import { env } from "@/lib/config/env";
 import { ApiErrorCode } from "@/lib/enums";
 import { loginSchema } from "@/lib/validations/auth";
 
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
 
   let backendResponse: Response;
   try {
-    backendResponse = await fetch(`${serverEnv.BACKEND_URL}${BACKEND_LOGIN_PATH}`, {
+    backendResponse = await fetch(`${env.BACKEND_URL}${BACKEND_LOGIN_PATH}`, {
       method: "POST",
       headers: {
         Accept: "application/json",
