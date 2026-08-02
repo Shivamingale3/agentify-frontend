@@ -10,3 +10,9 @@ export type CookieName = (typeof COOKIE_NAMES)[keyof typeof COOKIE_NAMES];
 export type AccessTokenPayload = z.infer<typeof accessTokenSchema>;
 export type RefreshTokenPayload = z.infer<typeof refreshTokenSchema>;
 export type LoginBody = z.infer<typeof loginSchema>;
+
+declare module 'express-serve-static-core' {
+  interface Request {
+    user?: AccessTokenPayload;
+  }
+}

@@ -5,6 +5,6 @@ import { loginController, logoutController } from '../controller/auth.controller
 
 const authRouter = Router();
 
-authRouter.get('/login', validationMiddleware(loginSchema), loginController);
-authRouter.get('/logout', logoutController);
+authRouter.post('/login', validationMiddleware(loginSchema), loginController);
+authRouter.post('/logout', logoutController);
 export default authRouter;

@@ -11,19 +11,22 @@ import type { AccessTokenPayload, RefreshTokenPayload } from '../types/auth.type
 export function createAccessToken(user: Pick<User, 'userId' | 'email'>): string {
   return jwt.sign(user, env.TOKEN_SECRET, {
     expiresIn: env.ACCESS_TOKEN_EXPIRY,
-    algorithm: 'RS512',
+    algorithm: 'HS512',
   });
 }
 
 export function createRefreshToken(sessionId: string): string {
   return jwt.sign({ sessionId }, env.TOKEN_SECRET, {
     expiresIn: env.REFRESH_TOKEN_EXPIRY,
-    algorithm: 'RS512',
+    algorithm: 'HS512',
   });
 }
 
-export function verifyAccessToken(token: string): AccessTokenPayload {
-  const payload = jwt.verify(token, env.TOKEN_SECRET);
+export function verifyAccessToken(
+  token: string,
+  options?: jwt.VerifyOptions,
+): AccessTokenPayload | null {
+  const payload = jwt.verify(token, env.TOKEN_SECRET, options);
   return accessTokenSchema.parse(payload);
 }
 

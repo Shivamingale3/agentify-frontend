@@ -14,6 +14,7 @@ import type { Request } from 'express';
 import { getDeviceInfo } from '../utils/http.utils.js';
 import { createUserSession, deleteSession } from './session.service.js';
 import { logger } from '../utils/logger.js';
+import cacheService from './cache.service.js';
 
 export async function loginService({
   email,
@@ -58,6 +59,7 @@ export async function loginService({
     ip: ip,
     userAgent: userAgent,
     userId: user.userId,
+    email: email,
     refreshTokenHash: hashString(refreshToken),
   };
   await createUserSession(sessionPayload);
@@ -72,4 +74,31 @@ export async function logoutService(refreshToken: string): Promise<void> {
     return;
   }
   await deleteSession(payload.sessionId);
+}
+
+export async function refreshSessionService(
+  refreshToken: string,
+): Promise<{ accessToken: string; refreshToken: string }> {
+  const payload = decodeRefreshToken(refreshToken);
+  if (!payload) {
+    throw new HttpException(401, 'Unauthorized, invalid credentials');
+  }
+
+  let session = await cacheService.get<UserSession>(payload.sessionId);
+  if (!session) {
+    session = await db.userSession.findUnique({
+      where: {
+        sessionId: payload.sessionId,
+      },
+    });
+    if (!session) {
+      throw new HttpException(401, 'Unauthorized, invalid credentials');
+    }
+    if (session.revokedAt) {
+      throw new HttpException(401, 'Unauthorized, invalid credentials');
+    }
+  }
+  const accessToken = createAccessToken({ email: session.email, userId: session.userId });
+  const newRefreshToken = createRefreshToken(session.sessionId);
+  return { accessToken, refreshToken: newRefreshToken };
 }

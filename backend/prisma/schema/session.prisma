@@ -1,6 +1,7 @@
 model UserSession {
   sessionId        String    @id
   userId           String
+  email            String
   refreshTokenHash String
   device           String?
   ip               String?

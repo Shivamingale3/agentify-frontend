@@ -8,7 +8,7 @@ export async function createUserSession(
   const createdSession = await db.userSession.create({
     data: session,
   });
-  await cacheService.set(createdSession.refreshTokenHash, JSON.stringify(createdSession));
+  await cacheService.set(createdSession.sessionId, JSON.stringify(createdSession));
 }
 
 export async function deleteSession(sessionId: string): Promise<void> {

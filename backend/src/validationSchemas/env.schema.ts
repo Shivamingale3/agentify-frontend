@@ -41,6 +41,14 @@ const envSchema = z.object({
       message: 'REDIS QUEUE URL must start with redis:// or rediss://',
     }),
   REDIS_QUEUE_PASSWORD: z.string().nonoptional('REDIS QUEUE PASSWORD is required!'),
+  ALLOWED_ORIGINS: z
+    .string()
+    .default('http://localhost:3000')
+    .transform((val) => {
+      const origins = val.split(',');
+      if (origins.length === 0) throw new Error('ALLOWED_ORIGINS cannot be empty string');
+      return origins;
+    }),
 });
 
 export default envSchema;
