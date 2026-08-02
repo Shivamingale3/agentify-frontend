@@ -12,4 +12,13 @@ When working on `frontend/lib/validations/*.ts`, mirror the rules in
 the *rules* (length, regex, required fields) must match. Likewise, API response
 envelopes in `frontend/lib/types` must mirror `backend/src/lib/apiResponse.ts`
 and `backend/src/interfaces/api.interfaces.ts`.
+
+## Email templates — brand consistency
+
+Outbound HTML emails are defined in `backend/src/services/email/templates/`.
+Their design tokens (Oxanium font fallback, primary purple `#6d28d9`, surface
+colors) and layout (logo + wordmark masthead, footer) must stay aligned with
+this frontend's `app/globals.css` and `components.json` so emails stay on-brand.
+When you change the frontend theme, mirror the values in
+`backend/src/services/email/templates/partials/brand.ts`.
 <!-- END:nextjs-agent-rules -->

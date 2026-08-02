@@ -1,7 +1,7 @@
 import { db } from '../config/db.config.js';
 import bcrypt from 'bcrypt';
 import { HttpException } from '../exceptions/http.exception.js';
-import type { UserSession } from '@prisma/client';
+import type { User, UserSession } from '@prisma/client';
 import {
   createAccessToken,
   createRefreshToken,
@@ -10,40 +10,53 @@ import {
 } from './token.service.js';
 import { hashString } from '../utils/hash.utils.js';
 import { ulid } from 'ulid';
-import type { Request } from 'express';
 import { getDeviceInfo } from '../utils/http.utils.js';
 import { createUserSession, deleteSession } from './session.service.js';
 import { logger } from '../utils/logger.js';
 import cacheService from './cache.service.js';
+import { createUserService, getUserByEmailService } from './user.service.js';
+import type { Request } from 'express';
+import type { RegisterUserBody } from '../types/auth.types.js';
 
 export async function loginService({
   email,
   password,
-  request,
 }: {
   email: string;
   password: string;
-  request: Request;
-}): Promise<{ accessToken: string; refreshToken: string }> {
-  const user = await db.user.findUnique({
-    where: {
-      email,
-    },
-    select: {
-      userId: true,
-      email: true,
-      password: true,
-    },
-  });
-  if (!user) {
-    throw new HttpException(404, 'No user found by this email!');
-  }
+}): Promise<Pick<User, 'userId' | 'email'>> {
+  const user = await getUserByEmailService(email);
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) {
     throw new HttpException(400, 'Invalid credentials!');
   }
+  return user;
+}
 
-  const accessToken = createAccessToken({ email: email, userId: user.userId });
+export async function registerService({
+  email,
+  password,
+  firstName,
+  lastName,
+}: RegisterUserBody): Promise<Pick<User, 'email' | 'password' | 'userId'>> {
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const user = await createUserService({
+    email,
+    password: hashedPassword,
+    firstName: firstName ?? null,
+    lastName: lastName ?? null,
+  });
+  return user;
+}
+
+export async function postLoginService({
+  request,
+  user,
+}: {
+  request: Request;
+  user: Pick<User, 'userId' | 'email'>;
+}): Promise<{ accessToken: string; refreshToken: string }> {
+  const accessToken = createAccessToken({ email: user.email, userId: user.userId });
 
   const sessionId = ulid();
 
@@ -59,7 +72,7 @@ export async function loginService({
     ip: ip,
     userAgent: userAgent,
     userId: user.userId,
-    email: email,
+    email: user.email,
     refreshTokenHash: hashString(refreshToken),
   };
   await createUserSession(sessionPayload);

@@ -1,6 +1,8 @@
 import { app } from './app.js';
 import { db } from './config/db.config.js';
 import { connectRedis, disconnectRedis } from './config/cache.config.js';
+import { verifyEmailConnection, closeEmailTransport } from './config/email.config.js';
+import { queueConfig } from './config/queue.config.js';
 import { env } from './config/env.config.js';
 import { logger } from './utils/logger.js';
 
@@ -12,6 +14,9 @@ async function startServer(): Promise<void> {
 
     // Redis Cache Connection & Health Check
     await connectRedis();
+
+    // Email SMTP Health Check
+    await verifyEmailConnection();
 
     // Start Express Server
     const server = app.listen(env.APP_PORT, () => {
@@ -34,6 +39,10 @@ async function startServer(): Promise<void> {
       try {
         await db.$disconnect();
         await disconnectRedis();
+        // Stop draining the email queue before closing the SMTP transport so
+        // any in-flight job completes (with BullMQ's graceful close timeout).
+        await queueConfig.emailWorker.close();
+        closeEmailTransport();
         logger.info('Graceful shutdown completed successfully.');
         process.exit(0);
       } catch (err) {

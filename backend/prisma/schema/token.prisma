@@ -1,0 +1,18 @@
+/// Single-use email verification tokens. Opaque ulid hashed with SHA-256,
+/// mirroring the existing `refreshTokenHash` pattern in session.prisma.
+/// DB is the source of truth; Redis cache is a fast-lookup layer.
+model EmailVerificationToken {
+  /// The raw ulid token is never persisted; only its SHA-256 hash.
+  tokenId     String    @id @default(ulid())
+  userId      String
+  email       String
+  tokenHash   String    @unique
+  expiresAt   Int
+  consumedAt  DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("email_verification_tokens")
+}
