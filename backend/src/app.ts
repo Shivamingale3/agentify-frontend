@@ -9,6 +9,8 @@ import { globalRateLimiter } from './middlewares/rateLimiting.middleware.js';
 import { notFoundHandler } from './middlewares/notFound.middleware.js';
 import { router } from './routes/index.routes.js';
 import { morganStream } from './utils/logger.js';
+import { env } from './config/env.config.js';
+import { authMiddleware } from './middlewares/auth.middleware.js';
 
 export const app = express();
 
@@ -19,7 +21,7 @@ export const app = express();
 app.set('trust proxy', 1);
 
 app.use(helmet());
-app.use(cors());
+app.use(cors({ credentials: true, origin: env.ALLOWED_ORIGINS }));
 
 app.use(globalRateLimiter);
 
@@ -28,7 +30,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(morgan('dev', { stream: morganStream }));
-
+app.use(authMiddleware);
 app.use('/api', router);
 
 app.use(notFoundHandler);

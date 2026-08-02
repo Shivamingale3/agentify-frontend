@@ -7,6 +7,7 @@ import {
 import { verifyAccessToken } from '../services/token.service.js';
 import { HttpException } from '../exceptions/http.exception.js';
 import { refreshSessionService } from '../services/auth.service.js';
+import { PUBLIC_ROUTES } from '../constants/auth.constants.js';
 
 export const authMiddleware = async (
   request: Request,
@@ -14,6 +15,13 @@ export const authMiddleware = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
+    const path = request.path;
+
+    if (PUBLIC_ROUTES.includes(path)) {
+      next();
+      return;
+    }
+
     const accessToken = getAccessTokenCookie(request);
     if (!accessToken) {
       throw new HttpException(401, 'Unauthorized, missing credentials');
