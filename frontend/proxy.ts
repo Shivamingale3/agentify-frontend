@@ -1,8 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { AUTH_COOKIE_NAME } from "@/lib/constants";
 import {
   AuthRoutes,
+  COOKIE_NAMES,
   DEFAULT_AUTH_REDIRECT,
   DEFAULT_UNAUTH_REDIRECT,
   PublicRoutes,
@@ -21,12 +21,14 @@ export function proxy(request: NextRequest) {
   const isPublicRoute = isMatching(pathname, PublicRoutes);
   const isExempt = isAuthRoute || isPublicRoute;
 
-  const token = request.cookies.get(AUTH_COOKIE_NAME)?.value;
+  const token = request.cookies.get(COOKIE_NAMES.ACCESS_TOKEN)?.value;
   const isAuthenticated = Boolean(token);
 
   // Authenticated users visiting auth-only pages are sent to the app.
   if (isAuthRoute && isAuthenticated) {
-    return NextResponse.redirect(new URL(DEFAULT_AUTH_REDIRECT, request.nextUrl));
+    return NextResponse.redirect(
+      new URL(DEFAULT_AUTH_REDIRECT, request.nextUrl),
+    );
   }
 
   // Unauthenticated users visiting protected pages are sent to login.

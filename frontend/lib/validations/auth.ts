@@ -15,13 +15,26 @@ export const loginSchema = z.object({
   password: z
     .string()
     .min(PASSWORD.MIN_LENGTH, {
-      message: `Password must be at least ${PASSWORD.MIN_LENGTH} characters.`,
+      message: `Password must be at least ${PASSWORD.MIN_LENGTH} characters long.`,
     })
     .max(PASSWORD.MAX_LENGTH, {
-      message: `Password must be at most ${PASSWORD.MAX_LENGTH} characters.`,
+      message: `Password must be at most ${PASSWORD.MAX_LENGTH} characters long.`,
+    })
+    .regex(/[a-z]/, {
+      message: "Password must contain at least one lowercase letter.",
+    })
+    .regex(/[A-Z]/, {
+      message: "Password must contain at least one uppercase letter.",
+    })
+    .regex(/\d/, {
+      message: "Password must contain at least one number.",
+    })
+    .regex(/[^a-zA-Z\d]/, {
+      message: "Password must contain at least one special character.",
     }),
-  rememberMe: z.boolean().optional(),
 });
 
 export type LoginSchemaValues = z.infer<typeof loginSchema>;
-export type LoginFormErrors = Partial<Record<keyof LoginSchemaValues, string[]>>;
+export type LoginFormErrors = Partial<
+  Record<keyof LoginSchemaValues, string[]>
+>;

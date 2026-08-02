@@ -30,7 +30,7 @@ export const validationMiddleware = (
     } catch (error) {
       if (error instanceof ZodError) {
         const message = error.issues[0]?.message ?? 'Validation failed';
-        next(new HttpException(400, message));
+        next(new HttpException(422, message));
       } else {
         next(error);
       }

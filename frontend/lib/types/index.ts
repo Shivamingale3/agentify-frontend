@@ -5,18 +5,19 @@ import type { envSchema } from "../validations/env";
 export interface LoginRequest {
   email: string;
   password: string;
-  rememberMe?: boolean;
 }
 
-export interface LoginResponse {
-  user: AuthUser;
+/**
+ * Envelope returned by the backend (`ApiResponse<T>`).
+ * Mirrors `backend/src/lib/apiResponse.ts` + `interfaces/api.interfaces.ts`.
+ */
+export interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
 }
 
-export interface AuthUser {
-  id: string;
-  email: string;
-  name: string;
-}
+export type LoginResponse = ApiResponse<null>;
 
 export interface ApiSuccessResult<T> {
   ok: true;

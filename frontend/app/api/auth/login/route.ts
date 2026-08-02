@@ -4,7 +4,7 @@ import { env } from "@/lib/config/env";
 import { ApiErrorCode } from "@/lib/enums";
 import { loginSchema } from "@/lib/validations/auth";
 
-const BACKEND_LOGIN_PATH = "/auth/login"; // TODO: confirm exact backend login endpoint
+const BACKEND_LOGIN_PATH = "/api/auth/login";
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -64,8 +64,8 @@ export async function POST(request: Request) {
     setCookie.forEach((cookie) => headers.append("set-cookie", cookie));
   }
 
-  return NextResponse.json(
-    data ?? {},
-    { status: backendResponse.status, headers },
-  );
+  return NextResponse.json(data ?? {}, {
+    status: backendResponse.status,
+    headers,
+  });
 }

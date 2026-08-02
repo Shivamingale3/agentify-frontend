@@ -41,7 +41,7 @@ export function LoginForm() {
 
   const form = useForm<LoginSchemaValues>({
     resolver: zodResolver(loginSchema),
-    defaultValues: { email: "", password: "", rememberMe: false },
+    defaultValues: { email: "", password: "" },
   });
 
   const isSubmitting = form.formState.isSubmitting;
@@ -50,7 +50,7 @@ export function LoginForm() {
     if (error.code === ApiErrorCode.VALIDATION && error.fieldErrors) {
       (Object.entries(error.fieldErrors) as [keyof LoginSchemaValues, string[] | undefined][]).forEach(
         ([field, messages]) => {
-          if (field === "rememberMe" || !messages?.[0]) return;
+          if (!messages?.[0]) return;
           form.setError(field, { type: "server", message: messages[0] });
         },
       );
@@ -144,25 +144,6 @@ export function LoginForm() {
                   </div>
                   <FormMessage />
                 </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="rememberMe"
-              render={({ field }) => (
-                <label className="flex cursor-pointer items-center gap-2 text-sm text-muted-foreground select-none">
-                  <input
-                    type="checkbox"
-                    checked={Boolean(field.value)}
-                    disabled={isSubmitting}
-                    onChange={field.onChange}
-                    onBlur={field.onBlur}
-                    name={field.name}
-                    className="size-4 rounded-none border-input accent-primary"
-                  />
-                  Remember me
-                </label>
               )}
             />
 

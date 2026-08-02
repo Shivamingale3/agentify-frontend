@@ -1,6 +1,9 @@
 export const APP_NAME = "Get Your Bot";
 
-export const AUTH_COOKIE_NAME = "session";
+export const COOKIE_NAMES = {
+  ACCESS_TOKEN: "access_token",
+  REFRESH_TOKEN: "refresh_token",
+} as const;
 
 export const Routes = {
   HOME: "/home",
@@ -24,7 +27,7 @@ export const DEFAULT_UNAUTH_REDIRECT = Routes.LOGIN;
 
 export const PASSWORD = {
   MIN_LENGTH: 8,
-  MAX_LENGTH: 64,
+  MAX_LENGTH: 16,
 } as const;
 
 export const EMAIL = {
