@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 /**
  * The header's only interactive element, split out so site-header.tsx itself
@@ -9,11 +10,15 @@ import { Button } from "@/components/ui/button";
  * it still receives pointer input.
  */
 export default function GetStartedButton() {
+  const router = useRouter();
   const scrollToBottom = () => {
     window.scrollTo({
       top: document.documentElement.scrollHeight,
       behavior: "smooth",
     });
+    setTimeout(() => {
+      router.push("/login");
+    }, 1000);
   };
 
   return (
