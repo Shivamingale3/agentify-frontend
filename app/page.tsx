@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { preload } from "react-dom";
 import LandingPage from "@/components/landing/landing-page";
 import {
   HOME_DESCRIPTION,
@@ -80,6 +81,26 @@ const jsonLd = {
 };
 
 export default function Home() {
+  /*
+    Breaks the model's request waterfall. The 3D scene is a `ssr: false`
+    dynamic import, so without this the .glb isn't requested until React
+    hydrates, the ~350 KB scene chunk downloads, AND ~1.2 MB of Three.js
+    parses — measured at 274 ms before the first model byte on localhost,
+    where bandwidth is free and every hop costs zero latency. On a real
+    connection that's three serial round-trips deep.
+
+    `preload()` rather than a raw <link>: React emits exactly one hoisted tag
+    and dedupes it, where the JSX element is rendered inline *and* hoisted.
+    `as: "fetch"` + `crossOrigin` must match how GLTFLoader issues the request
+    — a mismatch makes the browser discard the preload and fetch the model
+    a second time.
+  */
+  preload("/models/agentify-head.glb", {
+    as: "fetch",
+    crossOrigin: "anonymous",
+    type: "model/gltf-binary",
+  });
+
   return (
     <>
       {/*

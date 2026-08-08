@@ -25,6 +25,16 @@ import { playClack, playPing } from "@/lib/bot/audio";
 import { useBotLayout, type RestPose } from "@/lib/bot/use-bot-layout";
 import BotEyes from "./bot-eyes";
 
+/**
+ * Meshopt-compressed (EXT_meshopt_compression + KHR_mesh_quantization): 3.2 MB
+ * → 985 KB, ~730 KB over the wire. Meshopt rather than Draco because three
+ * ships the decoder locally, so it bundles with the scene chunk instead of
+ * costing an extra CDN round-trip before a single vertex can be read.
+ *
+ * The node names the PART_BUCKETS regexes match are preserved exactly — do not
+ * run gltf-transform's blanket `optimize` on this asset, as its `join`/`dedup`
+ * passes merge and rename nodes, which silently breaks the assembly buckets.
+ */
 const MODEL_URL = "/models/agentify-head.glb";
 
 const OFFSET_VEC = new THREE.Vector3();
@@ -40,7 +50,9 @@ const FINALE_RESET_BELOW = stepRange(7)[0];
  * computed once by useBotLayout — this component only animates and renders.
  */
 export default function BotHead() {
-  const { scene } = useGLTF(MODEL_URL) as unknown as { scene: THREE.Group };
+  const { scene } = useGLTF(MODEL_URL, false, true) as unknown as {
+    scene: THREE.Group;
+  };
 
   const accent = useMemo(() => new THREE.Color("#7c5cff"), []);
   const groupRef = useRef<THREE.Group>(null);
@@ -204,4 +216,4 @@ export default function BotHead() {
   );
 }
 
-useGLTF.preload(MODEL_URL);
+useGLTF.preload(MODEL_URL, false, true);
