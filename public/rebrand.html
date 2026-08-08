@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Get Your Bot is now Agentify</title>
+<meta name="robots" content="noindex, nofollow" />
+<!-- No-JS / slow-JS fallback: browsers that ignore the JS timer still redirect. -->
+<meta http-equiv="refresh" content="5;url=https://agentify.shivamingale.com" />
+<style>
+  :root {
+    --background: #000000;
+    --card: #0b0b0b;
+    --border: rgba(255, 255, 255, 0.09);
+    --border-strong: rgba(255, 255, 255, 0.18);
+    --foreground: #fafafa;
+    --muted: #7d7d7d;
+    --primary: #ffffff;
+    --primary-foreground: #000000;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Soft brand glow, same idea as the app's auth-screen background */
+  body::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% -10%, rgba(255, 255, 255, 0.08), transparent 60%);
+    pointer-events: none;
+  }
+
+  main {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    padding: 48px 40px;
+    text-align: center;
+    animation: rise 0.5s ease-out both;
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .rename {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    margin-bottom: 28px;
+  }
+
+  .old-name {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--border-strong);
+  }
+
+  .arrow {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  .new-name {
+    font-size: 40px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--foreground);
+  }
+
+  .tagline {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 32px;
+  }
+
+  ul.details {
+    list-style: none;
+    margin: 0 0 32px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    text-align: left;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 0;
+  }
+
+  ul.details li {
+    position: relative;
+    padding-left: 18px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  ul.details li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 6px;
+    height: 6px;
+    background: var(--primary);
+  }
+
+  ul.details b {
+    display: block;
+    margin-bottom: 2px;
+    font-weight: 700;
+    color: var(--foreground);
+  }
+
+  .redirect {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: center;
+  }
+
+  .redirect p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .redirect strong {
+    color: var(--foreground);
+  }
+
+  .bar-track {
+    width: 100%;
+    height: 3px;
+    background: var(--border);
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--primary);
+    transition: width 5s linear;
+  }
+
+  a.cta {
+    margin-top: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    padding: 0 24px;
+    background: var(--primary);
+    color: var(--primary-foreground);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid transparent;
+    transition: opacity 0.15s ease;
+  }
+
+  a.cta:hover { opacity: 0.8; }
+  a.cta:active { transform: translateY(1px); }
+
+  @media (prefers-reduced-motion: reduce) {
+    main { animation: none; }
+    .bar-fill { transition: none; }
+  }
+</style>
+</head>
+<body>
+  <main>
+    <div class="rename">
+      <span class="old-name">Get Your Bot</span>
+      <span class="arrow">&darr; upgraded to</span>
+      <span class="new-name">Agentify</span>
+    </div>
+    <p class="tagline">Ship an agent, not a chatbot.</p>
+
+    <ul class="details">
+      <li><b>A whole new build.</b> <span>Not a reskin — rebuilt from the ground up for agents, not chat widgets.</span></li>
+      <li><b>Real agentic capability.</b> <span>Persona, knowledge, and tools assembled in minutes, not chat scripts.</span></li>
+      <li><b>Still one embed line.</b> <span>No code, no reinstall, no SDK — the easy part didn't change.</span></li>
+    </ul>
+
+    <div class="redirect">
+      <div class="bar-track"><div class="bar-fill" id="bar"></div></div>
+      <p id="status" aria-live="polite">
+        Redirecting to <strong>agentify.shivamingale.com</strong> in <strong id="count">5</strong>s&hellip;
+      </p>
+      <a class="cta" href="https://agentify.shivamingale.com">Go now</a>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      var DEST = "https://agentify.shivamingale.com";
+      var SECONDS = 5;
+
+      var countEl = document.getElementById("count");
+      var barEl = document.getElementById("bar");
+
+      // Kick the width transition off on the next frame so the browser
+      // registers the 0% starting state before animating to 100%.
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          barEl.style.width = "100%";
+        });
+      });
+
+      var remaining = SECONDS;
+      var timer = setInterval(function () {
+        remaining -= 1;
+        countEl.textContent = Math.max(remaining, 0);
+        if (remaining <= 0) {
+          clearInterval(timer);
+        }
+      }, 1000);
+
+      setTimeout(function () {
+        window.location.replace(DEST);
+      }, SECONDS * 1000);
+    })();
+  </script>
+</body>
+</html>
