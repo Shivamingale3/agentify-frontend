@@ -25,7 +25,7 @@ import { playClack, playPing } from "@/lib/bot/audio";
 import { useBotLayout, type RestPose } from "@/lib/bot/use-bot-layout";
 import BotEyes from "./bot-eyes";
 
-const MODEL_URL = "/models/botify-head.glb";
+const MODEL_URL = "/models/agentify-head.glb";
 
 const OFFSET_VEC = new THREE.Vector3();
 const RING_VEC = new THREE.Vector3();

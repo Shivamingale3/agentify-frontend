@@ -1,4 +1,17 @@
+import type { Metadata } from "next";
+
 import { ThemeToggle } from "@/components/theme-toggle";
+
+/**
+ * Every auth screen is noindex/nofollow. They carry no content worth ranking,
+ * and `/reset-password/[token]` and `/verify-email?token=` put a single-use
+ * credential in the URL — that must never reach a search index or a referrer
+ * chain. Inherited by each page in this group; the pages' own `title` and
+ * `description` exports merge on top without overriding `robots`.
+ */
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (

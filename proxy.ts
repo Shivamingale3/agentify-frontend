@@ -42,6 +42,18 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Run on every route except Next internals, API route handlers, and static files.
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)"],
+  /**
+   * Run on every route except Next internals, API route handlers, and static
+   * files.
+   *
+   * `opengraph-image` and `twitter-image` are generated metadata routes with
+   * no file extension, so the `.*\..*` clause doesn't cover them. Without an
+   * explicit exemption the auth check below redirects them to /login for any
+   * unauthenticated fetch — which is every social crawler, so every link
+   * preview would silently lose its image. (robots.txt and sitemap.xml are
+   * already exempt via the extension clause.)
+   */
+  matcher: [
+    "/((?!api|_next/static|_next/image|favicon.ico|opengraph-image|twitter-image|.*\\..*).*)",
+  ],
 };

@@ -1,48 +1,55 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, type ReactNode } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import type { Step } from "./steps-data";
+import type { StepSide } from "./steps-data";
 import { useStepScroll } from "./use-step-scroll";
 import Hero from "./hero";
-import StepCard from "./step-card";
-import EmbedSnippet from "./embed-snippet";
 
 /**
  * One full-viewport step. Single responsibility: lay out this step's content
  * (hero + card, positioned to alternate sides) and apply the motion values
  * use-step-scroll computes — it doesn't compute any scroll math itself.
+ *
+ * The card arrives as `children` rather than being built here from a `Step`,
+ * so all the step copy stays in Server Components and never reaches the
+ * browser bundle. This component only needs the three layout/animation
+ * primitives below, so those are the only props that cross the boundary.
  */
 export default function StepSection({
-  step,
-  isFinale,
+  n,
+  stepNum,
+  side,
+  headingId,
+  children,
 }: {
-  step: Step;
-  isFinale: boolean;
+  n: string;
+  stepNum: number;
+  side: StepSide;
+  headingId: string;
+  children: ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const { y, cardOpacity, heroOpacity, heroY } = useStepScroll(
-    ref,
-    step.stepNum
-  );
+  const { y, cardOpacity, heroOpacity, heroY } = useStepScroll(ref, stepNum);
 
-  const alignRight = step.side === "right";
+  const alignRight = side === "right";
 
   return (
     <section
       ref={ref}
-      data-step={step.n}
+      id={`step-${n}`}
+      data-step={n}
       className="relative h-screen w-full flex flex-col justify-center px-6 md:px-16 lg:px-28 pt-20 md:pt-0"
-      aria-label={`Step ${step.n}`}
+      aria-labelledby={headingId}
     >
-      {step.stepNum === 1 && <Hero opacity={heroOpacity} y={heroY} />}
+      {stepNum === 1 && <Hero opacity={heroOpacity} y={heroY} />}
 
       <motion.div
         style={{ y, opacity: cardOpacity }}
         className={cn("flex w-full", alignRight ? "justify-end" : "justify-start")}
       >
-        <StepCard step={step}>{isFinale && <EmbedSnippet />}</StepCard>
+        {children}
       </motion.div>
     </section>
   );

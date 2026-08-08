@@ -4,7 +4,7 @@ export default function CreditFooter() {
       <div className="max-w-6xl mx-auto px-6 md:px-12 py-10 flex flex-col md:flex-row gap-6 md:items-end md:justify-between">
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
-            <span className="label-eyebrow">Botify · speculative concept</span>
+            <span className="label-eyebrow">Agentify · speculative concept</span>
             <span className="badge border border-border-strong text-muted-foreground">
               Coming soon
             </span>

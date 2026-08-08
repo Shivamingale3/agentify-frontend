@@ -127,12 +127,12 @@ const Logo = ({ size = "xs", mode = "portrait", className = "" }: LogoProps) => 
         } ${config.textGap}`}
       >
         <h1 className={`text-foreground ${config.title}`}>
-          {(process.env.NEXT_PUBLIC_APP_NAME || "GET YOUR BOT").toUpperCase()}
+          {(process.env.NEXT_PUBLIC_APP_NAME || "AGENTIFY").toUpperCase()}
         </h1>
         <h5 className={config.tagline}>
           {(
             process.env.NEXT_PUBLIC_APP_TAG_LINE ||
-            "AGENTIC BOTS · CHAT & SUPPORT"
+            "SHIP AN AGENT, NOT A CHATBOT"
           ).toUpperCase()}
         </h5>
       </div>

@@ -8,7 +8,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
     <div className="flex min-h-svh flex-col">
       <header className="flex h-16 items-center justify-between px-4 md:px-8">
         <Link href={Routes.HOME} className="font-heading text-base font-semibold uppercase tracking-widest">
-          Get Your Bot
+          Agentify
         </Link>
         <ThemeToggle />
       </header>

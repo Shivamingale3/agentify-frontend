@@ -12,6 +12,8 @@ export enum UserRole {
 export enum ApiErrorCode {
   UNAUTHORIZED = "unauthorized",
   VALIDATION = "validation",
+  NOT_FOUND = "not_found",
+  CONFLICT = "conflict",
   RATE_LIMITED = "rate_limited",
   UNKNOWN = "unknown",
 }

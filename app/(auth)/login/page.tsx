@@ -7,7 +7,7 @@ import Logo from "@/components/ui/logo";
 
 export const metadata = {
   title: "Sign in",
-  description: "Sign in to your Get Your Bot account.",
+  description: "Sign in to your Agentify account.",
 };
 
 export default function LogIn() {

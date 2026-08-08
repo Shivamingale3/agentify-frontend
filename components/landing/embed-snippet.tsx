@@ -4,7 +4,7 @@ import { useState } from "react";
 import { RiCheckLine, RiFileCopyLine } from "@remixicon/react";
 import { Button } from "@/components/ui/button";
 
-const SNIPPET = `<script src="https://cdn.botify.ai/embed.js"
+const SNIPPET = `<script src="https://cdn.agentify.ai/embed.js"
   data-bot="your-bot-id"
   defer
 ></script>`;

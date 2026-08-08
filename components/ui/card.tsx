@@ -33,9 +33,21 @@ function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
-function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
+/**
+ * `as` lets a card title render as a real heading (`h2`, `h3`, …) where the
+ * card is page content rather than chrome, so the document keeps a crawlable
+ * heading outline. Defaults to `div` — cards used as UI panels shouldn't
+ * inject headings into the outline.
+ */
+type CardTitleTag = "div" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
+
+function CardTitle({
+  className,
+  as: Comp = "div",
+  ...props
+}: React.HTMLAttributes<HTMLElement> & { as?: CardTitleTag }) {
   return (
-    <div
+    <Comp
       data-slot="card-title"
       className={cn(
         "font-heading text-lg font-semibold tracking-wider uppercase",
