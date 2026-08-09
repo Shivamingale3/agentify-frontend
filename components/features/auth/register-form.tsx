@@ -8,9 +8,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormAlert } from "@/components/features/auth/form-alert";
 import { NoticeCard } from "@/components/features/auth/notice-card";
 import { PasswordField } from "@/components/features/auth/password-field";
+import { ResendVerificationButton } from "@/components/features/auth/resend-verification-button";
 import { SubmitButton } from "@/components/features/auth/submit-button";
 import { TextField } from "@/components/features/auth/text-field";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -25,6 +26,7 @@ import { applyServerErrors } from "@/lib/forms/server-errors";
 import { register } from "@/lib/services/auth";
 import { toast } from "@/lib/toast";
 import type { RegisterRequest } from "@/lib/types";
+import { cn } from "@/lib/utils";
 import {
   registerFormSchema,
   type RegisterFormValues,
@@ -86,18 +88,19 @@ export function RegisterForm() {
         description={
           <>
             We sent a verification link to{" "}
-            <span className="text-foreground">{registeredEmail}</span>. Open it to
-            activate your account, then sign in. The link expires in 24 hours.
+            <span className="text-foreground">{registeredEmail}</span>. Open it
+            to activate your account, then sign in. The link expires in 24
+            hours.
           </>
         }
       >
-        <Button
-          render={<Link href={Routes.LOGIN} />}
-          variant="outline"
-          className="w-full"
+        <ResendVerificationButton email={registeredEmail} />
+        <Link
+          href={Routes.LOGIN}
+          className={cn(buttonVariants({ variant: "ghost" }), "w-full")}
         >
           Back to sign in
-        </Button>
+        </Link>
       </NoticeCard>
     );
   }
@@ -107,7 +110,8 @@ export function RegisterForm() {
       <CardHeader>
         <CardTitle>Create your account</CardTitle>
         <CardDescription>
-          It takes a minute. We&rsquo;ll email you a link to verify your address.
+          It takes a minute. We&rsquo;ll email you a link to verify your
+          address.
         </CardDescription>
       </CardHeader>
 

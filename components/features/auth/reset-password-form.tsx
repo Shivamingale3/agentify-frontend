@@ -10,7 +10,7 @@ import { NoticeCard } from "@/components/features/auth/notice-card";
 import { PasswordField } from "@/components/features/auth/password-field";
 import { SubmitButton } from "@/components/features/auth/submit-button";
 import { TokenPendingCard } from "@/components/features/auth/token-pending-card";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -25,6 +25,7 @@ import { applyServerErrors } from "@/lib/forms/server-errors";
 import { useTokenVerification } from "@/lib/hooks/use-token-verification";
 import { resetPassword, verifyResetToken } from "@/lib/services/auth";
 import { toast } from "@/lib/toast";
+import { cn } from "@/lib/utils";
 import {
   resetPasswordFormSchema,
   type ResetPasswordFormValues,
@@ -35,20 +36,26 @@ interface ResetPasswordFormProps {
 }
 
 export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
-  const { status, errorMessage } = useTokenVerification(token, verifyResetToken);
+  const { status, errorMessage } = useTokenVerification(
+    token,
+    verifyResetToken,
+  );
   const [formError, setFormError] = useState<string | null>(null);
   const [isReset, setIsReset] = useState(false);
 
   const form = useForm<ResetPasswordFormValues>({
     resolver: zodResolver(resetPasswordFormSchema),
-    defaultValues: { password: "", confirmPassword: "" },
+    defaultValues: { newPassword: "", confirmPassword: "" },
   });
 
   const isSubmitting = form.formState.isSubmitting;
 
   const onSubmit = async (values: ResetPasswordFormValues) => {
     setFormError(null);
-    const result = await resetPassword({ token, password: values.password });
+    const result = await resetPassword({
+      token,
+      newPassword: values.newPassword,
+    });
 
     if (!result.ok) {
       setFormError(
@@ -81,15 +88,18 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
           "This reset link has expired or has already been used. Request a new one to continue."
         }
       >
-        <Button
-          render={<Link href={Routes.FORGOT_PASSWORD} />}
-          className="w-full"
+        <Link
+          href={Routes.FORGOT_PASSWORD}
+          className={cn(buttonVariants(), "w-full")}
         >
           Request a new link
-        </Button>
-        <Button render={<Link href={Routes.LOGIN} />} variant="ghost" className="w-full">
+        </Link>
+        <Link
+          href={Routes.LOGIN}
+          className={cn(buttonVariants({ variant: "ghost" }), "w-full")}
+        >
           Back to sign in
-        </Button>
+        </Link>
       </NoticeCard>
     );
   }
@@ -101,9 +111,9 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
         title="Password updated"
         description="Your password has been changed. You can now sign in with it."
       >
-        <Button render={<Link href={Routes.LOGIN} />} className="w-full">
+        <Link href={Routes.LOGIN} className={cn(buttonVariants(), "w-full")}>
           Continue to sign in
-        </Button>
+        </Link>
       </NoticeCard>
     );
   }
@@ -122,7 +132,7 @@ export function ResetPasswordForm({ token }: ResetPasswordFormProps) {
           <CardContent className="space-y-5">
             <PasswordField
               control={form.control}
-              name="password"
+              name="newPassword"
               label="New password"
               autoComplete="new-password"
               placeholder="Enter a new password"

@@ -41,7 +41,11 @@ export function LoginForm() {
     const result = await login(values);
     if (!result.ok) {
       setFormError(
-        applyServerErrors(form, result.error, "Unable to sign in. Please try again."),
+        applyServerErrors(
+          form,
+          result.error,
+          "Unable to sign in. Please try again.",
+        ),
       );
       return;
     }

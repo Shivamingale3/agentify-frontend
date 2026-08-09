@@ -9,7 +9,7 @@ import { FormAlert } from "@/components/features/auth/form-alert";
 import { NoticeCard } from "@/components/features/auth/notice-card";
 import { SubmitButton } from "@/components/features/auth/submit-button";
 import { TextField } from "@/components/features/auth/text-field";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -23,6 +23,7 @@ import { Routes } from "@/lib/constants";
 import { applyServerErrors } from "@/lib/forms/server-errors";
 import { forgotPassword } from "@/lib/services/auth";
 import { toast } from "@/lib/toast";
+import { cn } from "@/lib/utils";
 import {
   forgotPasswordSchema,
   type ForgotPasswordFormValues,
@@ -70,8 +71,9 @@ export function ForgotPasswordForm() {
         description={
           <>
             If an account exists for{" "}
-            <span className="text-foreground">{requestedEmail}</span>, we&rsquo;ve
-            sent a link to reset your password. It expires in 30 minutes.
+            <span className="text-foreground">{requestedEmail}</span>,
+            we&rsquo;ve sent a link to reset your password. It expires in 30
+            minutes.
           </>
         }
       >
@@ -85,9 +87,12 @@ export function ForgotPasswordForm() {
         >
           Use a different email
         </Button>
-        <Button render={<Link href={Routes.LOGIN} />} variant="ghost" className="w-full">
+        <Link
+          href={Routes.LOGIN}
+          className={cn(buttonVariants({ variant: "ghost" }), "w-full")}
+        >
           Back to sign in
-        </Button>
+        </Link>
       </NoticeCard>
     );
   }
@@ -97,7 +102,8 @@ export function ForgotPasswordForm() {
       <CardHeader>
         <CardTitle>Forgot password</CardTitle>
         <CardDescription>
-          Enter your email and we&rsquo;ll send you a link to set a new password.
+          Enter your email and we&rsquo;ll send you a link to set a new
+          password.
         </CardDescription>
       </CardHeader>
 

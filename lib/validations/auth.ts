@@ -4,9 +4,10 @@ import { EMAIL, NAME, PASSWORD } from "@/lib/constants";
 
 /**
  * Field-level rules, declared once and composed by every auth schema so a
- * rule change lands in a single place. The *rules* mirror
- * `backend/src/validationSchemas/auth.schema.ts`; only the messages differ,
- * to give per-rule feedback instead of one catch-all regex message.
+ * rule change lands in a single place. The *rules* mirror the backend's Bean
+ * Validation constraints (`com.botify.api.dto.request.*`) and password policy
+ * (`security.password-policy.*`); only the messages differ, to give per-rule
+ * feedback instead of one catch-all message.
  */
 const emailSchema = z
   .string()
@@ -44,9 +45,9 @@ const confirmPasswordSchema = z
   .min(1, { message: "Please confirm your password." });
 
 /**
- * Names are optional on the backend, so an untouched input (`""`) has to pass.
- * `.refine` is used instead of `.min` so the empty case is exempt from the
- * lower bound without turning the schema into a union.
+ * Names are optional on the backend (`@Size` accepts null), so an untouched
+ * input (`""`) has to pass. `.refine` is used instead of `.min` so the empty
+ * case is exempt from the lower bound without turning the schema into a union.
  */
 const optionalNameSchema = (label: string) =>
   z
@@ -94,23 +95,33 @@ export const verifyEmailSchema = z.object({ token: tokenSchema });
 
 export const forgotPasswordSchema = z.object({ email: emailSchema });
 
-/** Payload sent to the backend once the new password is submitted. */
+export const resendVerificationSchema = z.object({ email: emailSchema });
+
+/**
+ * Payload sent to the backend once the new password is submitted. The field is
+ * `newPassword` because that is what `ResetPasswordRequest` binds.
+ */
 export const resetPasswordSchema = z.object({
   token: tokenSchema,
-  password: passwordSchema,
+  newPassword: passwordSchema,
 });
 
+/**
+ * The input is named `newPassword` to match the backend field, so a server
+ * error keyed `newPassword` lands on the right input instead of being dropped.
+ */
 export const resetPasswordFormSchema = z
   .object({
-    password: passwordSchema,
+    newPassword: passwordSchema,
     confirmPassword: confirmPasswordSchema,
   })
-  .refine(passwordsMatch, passwordMismatch);
+  .refine((values) => values.newPassword === values.confirmPassword, passwordMismatch);
 
 export type LoginSchemaValues = z.infer<typeof loginSchema>;
 export type RegisterSchemaValues = z.infer<typeof registerSchema>;
 export type RegisterFormValues = z.infer<typeof registerFormSchema>;
 export type VerifyEmailSchemaValues = z.infer<typeof verifyEmailSchema>;
 export type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
+export type ResendVerificationFormValues = z.infer<typeof resendVerificationSchema>;
 export type ResetPasswordSchemaValues = z.infer<typeof resetPasswordSchema>;
 export type ResetPasswordFormValues = z.infer<typeof resetPasswordFormSchema>;

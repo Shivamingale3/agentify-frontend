@@ -8,7 +8,11 @@ interface FormAlertProps {
 }
 
 /** Form-level feedback that isn't tied to a single field. */
-export function FormAlert({ message, tone = "error", className }: FormAlertProps) {
+export function FormAlert({
+  message,
+  tone = "error",
+  className,
+}: FormAlertProps) {
   if (!message) return null;
 
   return (

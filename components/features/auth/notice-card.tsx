@@ -15,7 +15,10 @@ import { cn } from "@/lib/utils";
 
 export type NoticeTone = "success" | "error" | "sent";
 
-const toneIcons: Record<NoticeTone, React.ComponentType<{ className?: string }>> = {
+const toneIcons: Record<
+  NoticeTone,
+  React.ComponentType<{ className?: string }>
+> = {
   success: RiCheckboxCircleLine,
   error: RiErrorWarningLine,
   sent: RiMailSendLine,
@@ -34,7 +37,12 @@ interface NoticeCardProps {
  * link expired. Every one of those screens is the same card with different
  * copy, so they share this shell.
  */
-export function NoticeCard({ tone, title, description, children }: NoticeCardProps) {
+export function NoticeCard({
+  tone,
+  title,
+  description,
+  children,
+}: NoticeCardProps) {
   const Icon = toneIcons[tone];
 
   return (

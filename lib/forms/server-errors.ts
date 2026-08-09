@@ -1,6 +1,6 @@
 import type { FieldValues, Path, UseFormReturn } from "react-hook-form";
 
-import { ApiErrorCode } from "@/lib/enums";
+import { FIELD_ERROR_CODES } from "@/lib/enums";
 import type { ApiError } from "@/lib/types";
 
 /**
@@ -16,11 +16,10 @@ export function applyServerErrors<TValues extends FieldValues>(
   error: ApiError,
   fallbackMessage: string,
 ): string {
-  if (error.code === ApiErrorCode.VALIDATION && error.fieldErrors) {
+  if (FIELD_ERROR_CODES.includes(error.code) && error.fieldErrors) {
     const knownFields = new Set(Object.keys(form.getValues()));
 
-    for (const [field, messages] of Object.entries(error.fieldErrors)) {
-      const message = messages?.[0];
+    for (const [field, message] of Object.entries(error.fieldErrors)) {
       if (!message || !knownFields.has(field)) continue;
       form.setError(field as Path<TValues>, { type: "server", message });
     }

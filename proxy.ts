@@ -21,8 +21,13 @@ export function proxy(request: NextRequest) {
   const isPublicRoute = isMatching(pathname, PublicRoutes);
   const isExempt = isAuthRoute || isPublicRoute;
 
-  const token = request.cookies.get(COOKIE_NAMES.ACCESS_TOKEN)?.value;
-  const isAuthenticated = Boolean(token);
+  // The access token lives ~15 minutes, the refresh token ~30 days. A session
+  // whose access token has lapsed is still live: the backend rotates it
+  // transparently on the next call. Gating on the access cookie alone would
+  // bounce those users to /login every quarter of an hour.
+  const isAuthenticated =
+    Boolean(request.cookies.get(COOKIE_NAMES.ACCESS_TOKEN)?.value) ||
+    Boolean(request.cookies.get(COOKIE_NAMES.REFRESH_TOKEN)?.value);
 
   // Authenticated users visiting auth-only pages are sent to the app.
   if (isAuthRoute && isAuthenticated) {

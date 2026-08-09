@@ -2,20 +2,10 @@ import { ApiErrorCode } from "@/lib/enums";
 import { fetcher, HttpError } from "@/lib/http/client";
 import type { ApiError, ApiResult } from "@/lib/types";
 
-const STATUS_TO_ERROR_CODE: Readonly<Record<number, ApiErrorCode>> = {
-  400: ApiErrorCode.VALIDATION,
-  401: ApiErrorCode.UNAUTHORIZED,
-  403: ApiErrorCode.UNAUTHORIZED,
-  404: ApiErrorCode.NOT_FOUND,
-  409: ApiErrorCode.CONFLICT,
-  422: ApiErrorCode.VALIDATION,
-  429: ApiErrorCode.RATE_LIMITED,
-};
-
 function toApiError(error: unknown): ApiError {
   if (error instanceof HttpError) {
     return {
-      code: STATUS_TO_ERROR_CODE[error.status] ?? ApiErrorCode.UNKNOWN,
+      code: error.code,
       message: error.message,
       fieldErrors: error.fieldErrors,
     };
@@ -24,6 +14,11 @@ function toApiError(error: unknown): ApiError {
     code: ApiErrorCode.UNKNOWN,
     message: error instanceof Error ? error.message : "Something went wrong.",
   };
+}
+
+/** Builds a failure result for a 200 response the caller judges unsuccessful. */
+export function failure(code: ApiErrorCode, message: string): ApiResult<never> {
+  return { ok: false, error: { code, message } };
 }
 
 /**
